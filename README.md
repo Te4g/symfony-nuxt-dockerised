@@ -4,6 +4,6 @@
 $ docker-compose up --build (might need to use sudo)
 
 ## Links
-front: http://localhost:3000
-back: http://localhost:8000
-adminer: http://localhost:8025
+Front: http://localhost:3000 <br/>
+Back: http://localhost:8000 <br/>
+Adminer: http://localhost:8025
