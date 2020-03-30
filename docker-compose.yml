@@ -1,0 +1,63 @@
+version: '3.4'
+
+services:
+
+  nginx:
+    build:
+      args:
+        VERSION: $NGINX_VERSION
+      context: symfony
+      dockerfile: docker/nginx/Dockerfile
+      target: dev
+    volumes:
+      - ./symfony/public:/app/symfony/public
+    depends_on:
+      - php-fpm
+    ports:
+     - 8000:80
+
+  php-fpm:
+    build:
+      args:
+        VERSION: $PHP_VERSION
+      context: symfony
+      dockerfile: docker/php-fpm/Dockerfile
+      target: dev
+    volumes:
+      - ./symfony:/app/symfony
+    command: sh -c 'composer install --no-interaction --optimize-autoloader && php-fpm'
+    depends_on:
+      - mysql
+
+  nuxt:
+    build:
+      context: nuxt
+    volumes:
+      - ./nuxt:/usr/src/nuxt
+      - /usr/src/nuxt/node_modules
+    ports:
+      - 81:3000
+
+  mysql:
+    build:
+      args:
+        VERSION: $MYSQL_VERSION
+      context: symfony/docker/mysql
+    ports:
+    - "3310:3306"
+    restart: always
+    environment:
+      - "MYSQL_ROOT_PASSWORD=psw"
+      - "MYSQL_USER=user"
+      - "MYSQL_PASSWORD=pass"
+      - "MYSQL_DATABASE=food"
+    volumes:
+    - ./symfony/docker/mysql/data:/var/lib/mysql
+
+  adminer:
+    image: adminer
+    restart: always
+    depends_on:
+      - mysql
+    ports:
+      - 8025:8080
