@@ -1,6 +1,10 @@
 # symfony-nuxt-dockerised
 
-## install
+## Requirements
+Docker https://docs.docker.com/ <br/>
+Docker-compose https://docs.docker.com/compose/install/
+
+## Install
 $ docker-compose up --build (might need to use sudo)
 
 ## Links
